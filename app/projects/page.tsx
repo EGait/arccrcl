@@ -24,8 +24,8 @@ export default function ProjectsPage() {
     return matchesCategory && matchesSearch
   })
 
-  const featured = filtered.filter((p) => p.featured)
-  const rest = filtered.filter((p) => !p.featured)
+const featured = filtered.filter((p: any) => p.featured)
+  const rest = filtered.filter((p: any) => !p.featured)
 
   return (
     <main className="bg-[#070c16] min-h-screen text-gray-100">
