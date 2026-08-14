@@ -47,11 +47,11 @@ export default function Hero() {
           News
         </button>
         <button
-          onClick={() => router.push('/lsts')}
+          onClick={() => router.push('/yield')}
           className="text-sm md:text-base px-4 py-2 md:px-6 md:py-2.5 rounded-lg hover:opacity-80 transition-opacity border"
           style={{ borderColor: '#E3C896', color: '#E3C896' }}
         >
-          LSTs
+          Yield
         </button>
         <button
           onClick={() => router.push('/stablecoins')}
