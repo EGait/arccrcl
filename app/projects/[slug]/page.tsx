@@ -73,7 +73,7 @@ export default function ProjectPage() {
                     {project.category}
                   </span>
                   <span className="text-xs px-2 py-0.5 rounded" style={{ backgroundColor: 'rgba(227,200,150,0.1)', color: '#E3C896' }}>
-                    {project.chain}
+                    {project.badge}
                   </span>
                 </div>
               </div>
