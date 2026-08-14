@@ -1,0 +1,463 @@
+"use client";
+
+// components/ChatWidget.tsx
+// Drop <ChatWidget /> into app/layout.tsx (inside <body>) to show it site-wide.
+// Styling is scoped via styled-jsx (built into Next.js) so it won't touch the
+// rest of your site — no Tailwind or global CSS required.
+
+import { useEffect, useRef, useState } from "react";
+import { CHAT_MODELS, DEFAULT_MODEL_KEY } from "../lib/models";
+
+const API_URL = "/api/chat";
+const GREETING =
+  "gm 👋 I'm the ArcCRCL assistant. Ask me about the feed, projects, or anything Arc. (I can't give financial advice.)";
+
+type Msg = {
+  role: "user" | "assistant" | "error";
+  content: string;
+  sources?: { title: string; url: string }[];
+  model?: string;
+};
+
+// Handles Markdown links [label](url), bare URLs, and internal paths like /lsts.
+// All links open in a new tab so the conversation stays put.
+function renderContent(text: string) {
+  const regex =
+    /(\[[^\]]+\]\([^)]+\))|(https?:\/\/[^\s)]+)|(\/[a-zA-Z][a-zA-Z0-9-]*(?:\/[a-zA-Z0-9-]+)*)/g;
+  return text
+    .split(regex)
+    .filter(Boolean)
+    .map((part, i) => {
+      const md = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+      if (md) {
+        return (
+          <a key={i} href={md[2]} target="_blank" rel="noopener noreferrer" className="cbw-link">
+            {md[1]}
+          </a>
+        );
+      }
+      if (/^https?:\/\//.test(part)) {
+        return (
+          <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="cbw-link">
+            {part}
+          </a>
+        );
+      }
+      if (/^\/[a-zA-Z]/.test(part)) {
+        return (
+          <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="cbw-link">
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+}
+
+export default function ChatWidget() {
+  const [open, setOpen] = useState(false);
+  const [messages, setMessages] = useState<Msg[]>([]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [model, setModel] = useState<string>(DEFAULT_MODEL_KEY);
+  const [mounted, setMounted] = useState(false);
+  const logRef = useRef<HTMLDivElement>(null);
+
+  // Skip server rendering so the scoped styles are always in place before the
+  // component paints (prevents a flash of unstyled content on first load).
+  useEffect(() => setMounted(true), []);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    logRef.current?.scrollTo({ top: logRef.current.scrollHeight });
+  }, [messages, loading]);
+
+  function openChat() {
+    setOpen(true);
+    setMessages((m) => (m.length === 0 ? [{ role: "assistant", content: GREETING }] : m));
+    setTimeout(() => inputRef.current?.focus(), 50);
+  }
+
+  async function send() {
+    const text = input.trim();
+    if (!text || loading) return;
+
+    const next: Msg[] = [...messages, { role: "user", content: text }];
+    setMessages(next);
+    setInput("");
+    setLoading(true);
+
+    try {
+      // Send only real turns, and make sure history starts with a user message
+      // (drop the leading assistant greeting).
+      const history = next.filter((m) => m.role !== "error");
+      while (history.length && history[0].role === "assistant") history.shift();
+
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: history.map(({ role, content }) => ({ role, content })),
+          model,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Request failed");
+
+      setMessages((m) => [
+        ...m,
+        { role: "assistant", content: data.reply, sources: data.sources, model: data.model },
+      ]);
+    } catch (err) {
+      console.error(err);
+      setMessages((m) => [
+        ...m,
+        {
+          role: "error",
+          content:
+            "Couldn't reach the assistant. Check that /api/chat is deployed and GEMINI_API_KEY is set.",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+      setTimeout(() => inputRef.current?.focus(), 50);
+    }
+  }
+
+  function onKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      send();
+    }
+  }
+
+  if (!mounted) return null;
+
+  return (
+    <div className={`cbw-root ${open ? "cbw-open" : ""}`}>
+      <div className="cbw-panel" role="dialog" aria-label="Chat assistant">
+        <div className="cbw-header">
+          <span className="cbw-dot" />
+          <div>
+            <div className="cbw-title">Feed Assistant</div>
+            <div className="cbw-sub">AI assistant · powered by Gemini</div>
+          </div>
+          <button className="cbw-close" aria-label="Close chat" onClick={() => setOpen(false)}>
+            &times;
+          </button>
+        </div>
+
+        <div className="cbw-log" ref={logRef}>
+          {messages.map((m, i) => (
+            <div key={i} className="cbw-row">
+              <div
+                className={`cbw-msg ${
+                  m.role === "user" ? "cbw-user" : m.role === "error" ? "cbw-err" : "cbw-ai"
+                }`}
+              >
+                {renderContent(m.content)}
+              </div>
+              {m.sources && m.sources.length > 0 && (
+                <div className="cbw-sources">
+                  {m.sources.map((s, j) => (
+                    <a
+                      key={j}
+                      href={s.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="cbw-src"
+                    >
+                      {s.title}
+                    </a>
+                  ))}
+                </div>
+              )}
+              {m.role === "assistant" && m.model && (
+                <div className="cbw-answeredby">answered by {m.model}</div>
+              )}
+            </div>
+          ))}
+          {loading && (
+            <div className="cbw-typing" aria-label="Assistant is typing">
+              <span /><span /><span />
+            </div>
+          )}
+        </div>
+
+        <div className="cbw-modelbar">
+          <select
+            className="cbw-model"
+            value={model}
+            onChange={(e) => setModel(e.target.value)}
+            aria-label="Choose model"
+          >
+            {CHAT_MODELS.map((m) => (
+              <option key={m.key} value={m.key}>
+                {m.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="cbw-inputbar">
+          <textarea
+            ref={inputRef}
+            className="cbw-input"
+            rows={1}
+            placeholder="Type a message…"
+            aria-label="Message"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={onKeyDown}
+          />
+          <button className="cbw-send" onClick={send} disabled={loading || !input.trim()}>
+            Send
+          </button>
+        </div>
+      </div>
+
+      <button className="cbw-launch" aria-label="Open chat" onClick={openChat}>
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3C6.5 3 2 6.8 2 11.5c0 2.3 1.1 4.4 2.9 5.9L4 21l4.3-1.8c1.1.3 2.4.5 3.7.5 5.5 0 10-3.8 10-8.7S17.5 3 12 3z" />
+        </svg>
+      </button>
+
+      <style jsx>{`
+        .cbw-root {
+          position: fixed;
+          bottom: 24px;
+          right: 24px;
+          z-index: 2147483000;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .cbw-launch {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          border: none;
+          cursor: pointer;
+          background: linear-gradient(135deg, #5F96A0, #e3c896);
+          box-shadow: 0 8px 30px rgba(227,200,150, 0.35);
+          display: grid;
+          place-items: center;
+          transition: transform 0.2s ease;
+        }
+        .cbw-launch:hover { transform: scale(1.06); }
+        .cbw-launch:active { transform: scale(0.96); }
+        .cbw-launch svg { width: 26px; height: 26px; fill: #070c16; }
+        .cbw-launch:focus-visible { outline: 3px solid #e3c896; outline-offset: 3px; }
+
+        .cbw-panel {
+          position: absolute;
+          bottom: 76px;
+          right: 0;
+          width: min(380px, calc(100vw - 32px));
+          height: min(560px, calc(100vh - 120px));
+          background: #070c16;
+          color: #EDE7DA;
+          border: 1px solid rgba(227,200,150, 0.2);
+          border-radius: 18px;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+          opacity: 0;
+          transform: translateY(12px) scale(0.98);
+          pointer-events: none;
+          transition: opacity 0.18s ease, transform 0.18s ease;
+        }
+        .cbw-root.cbw-open .cbw-panel {
+          opacity: 1;
+          transform: none;
+          pointer-events: auto;
+        }
+        .cbw-header {
+          padding: 14px 16px;
+          border-bottom: 1px solid rgba(227,200,150, 0.2);
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          position: relative;
+        }
+        .cbw-header::before {
+          content: "";
+          position: absolute;
+          inset: 0 0 auto 0;
+          height: 2px;
+          background: linear-gradient(90deg, #e3c896, #5F96A0);
+        }
+        .cbw-dot {
+          width: 9px;
+          height: 9px;
+          border-radius: 50%;
+          background: #e3c896;
+          box-shadow: 0 0 10px rgba(227,200,150, 0.9);
+        }
+        .cbw-title { font-size: 15px; font-weight: 600; }
+        .cbw-sub { font-size: 12px; color: #93a4b3; margin-top: 1px; }
+        .cbw-close {
+          margin-left: auto;
+          background: none;
+          border: none;
+          color: #93a4b3;
+          font-size: 22px;
+          line-height: 1;
+          cursor: pointer;
+          padding: 4px;
+          border-radius: 6px;
+        }
+        .cbw-close:hover { color: #EDE7DA; }
+
+        .cbw-log {
+          flex: 1;
+          overflow-y: auto;
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+        .cbw-msg {
+          max-width: 82%;
+          padding: 10px 13px;
+          border-radius: 14px;
+          font-size: 14px;
+          line-height: 1.45;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+        }
+        .cbw-user {
+          align-self: flex-end;
+          background: #e3c896;
+          color: #070c16;
+          font-weight: 500;
+          border-bottom-right-radius: 4px;
+        }
+        .cbw-ai {
+          align-self: flex-start;
+          background: #101b2c;
+          border: 1px solid rgba(227,200,150, 0.12);
+          border-bottom-left-radius: 4px;
+        }
+        .cbw-err {
+          align-self: flex-start;
+          background: #3a1a20;
+          color: #ffb4b4;
+        }
+        .cbw-row { display: contents; }
+        .cbw-link {
+          color: #EDDBB5;
+          text-decoration: underline;
+          text-underline-offset: 2px;
+        }
+        .cbw-user .cbw-link { color: #070c16; }
+        .cbw-answeredby {
+          align-self: flex-start;
+          font-size: 10px;
+          color: #6b7d8c;
+          margin-top: -4px;
+        }
+        .cbw-sources {
+          align-self: flex-start;
+          max-width: 82%;
+          margin-top: -4px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+        }
+        .cbw-src {
+          font-size: 11px;
+          color: #EDDBB5;
+          text-decoration: none;
+          background: #0c1626;
+          border: 1px solid rgba(227,200,150, 0.2);
+          border-radius: 999px;
+          padding: 3px 9px;
+          max-width: 180px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .cbw-src:hover { border-color: #e3c896; }
+
+        .cbw-typing {
+          align-self: flex-start;
+          background: #101b2c;
+          border: 1px solid rgba(227,200,150, 0.12);
+          border-radius: 14px;
+          padding: 12px 14px;
+          display: flex;
+          gap: 4px;
+        }
+        .cbw-typing span {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #93a4b3;
+          animation: cbw-bounce 1.2s infinite;
+        }
+        .cbw-typing span:nth-child(2) { animation-delay: 0.15s; }
+        .cbw-typing span:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes cbw-bounce {
+          0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+          30% { transform: translateY(-5px); opacity: 1; }
+        }
+        .cbw-modelbar {
+          display: flex;
+          justify-content: flex-end;
+          padding: 8px 12px 0;
+        }
+        .cbw-model {
+          background: rgba(227,200,150, 0.08);
+          color: #EDDBB5;
+          border: 1px solid rgba(227,200,150, 0.3);
+          border-radius: 8px;
+          padding: 4px 7px;
+          font-size: 11px;
+          font-family: inherit;
+          cursor: pointer;
+        }
+        .cbw-model:focus { outline: none; border-color: #e3c896; }
+        .cbw-model option {
+          background: #101b2c;
+          color: #EDE7DA;
+        }
+        .cbw-inputbar {
+          display: flex;
+          gap: 8px;
+          padding: 12px;
+          border-top: 1px solid rgba(227,200,150, 0.2);
+          background: #0b1524;
+        }
+        .cbw-input {
+          flex: 1;
+          resize: none;
+          max-height: 100px;
+          background: #070c16;
+          color: #EDE7DA;
+          border: 1px solid rgba(227,200,150, 0.2);
+          border-radius: 12px;
+          padding: 10px 12px;
+          font: inherit;
+          font-size: 14px;
+        }
+        .cbw-input:focus { outline: none; border-color: #e3c896; }
+        .cbw-send {
+          border: none;
+          border-radius: 12px;
+          padding: 0 16px;
+          cursor: pointer;
+          background: #e3c896;
+          color: #070c16;
+          font-weight: 600;
+        }
+        .cbw-send:hover:not(:disabled) { background: #5F96A0; }
+        .cbw-send:disabled { opacity: 0.5; cursor: default; }
+
+        @media (prefers-reduced-motion: reduce) {
+          .cbw-launch, .cbw-panel { transition: none; }
+          .cbw-typing span { animation: none; }
+        }
+      `}</style>
+    </div>
+  );
+}
