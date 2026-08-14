@@ -9,8 +9,7 @@ export default function ProjectPage() {
   const router = useRouter()
   const params = useParams()
   const slug = params?.slug as string
-  const project = projects.find(p => p.slug === slug)
-  
+  const project = projects.find((p: any) => p.slug === slug)
 
   if (!project) {
     return (
@@ -23,7 +22,7 @@ export default function ProjectPage() {
   }
 
   const relatedProjects = projects
-    .filter(p => p.category === project.category && p.id !== project.id)
+    .filter((p: any) => p.category === project.category && p.id !== project.id)
     .slice(0, 3)
 
   return (
@@ -57,7 +56,7 @@ export default function ProjectPage() {
                     src={project.logo}
                     alt={project.name}
                     className="w-full h-full object-cover rounded-2xl"
-                    onError={(e) => {
+                    onError={(e: any) => {
                       e.currentTarget.style.display = 'none'
                       const sibling = e.currentTarget.nextElementSibling as HTMLElement
                       if (sibling) sibling.style.display = 'block'
@@ -84,31 +83,6 @@ export default function ProjectPage() {
             {project.longDescription}
           </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-            {project.stats.tvl && (
-              <div className="rounded-xl p-3 text-center" style={{ backgroundColor: 'rgba(227,200,150,0.05)', border: '1px solid rgba(227,200,150,0.15)' }}>
-                <div className="text-xs text-gray-600 mb-1">TVL</div>
-                <div className="text-sm font-medium" style={{ color: '#E3C896' }}>{project.stats.tvl}</div>
-              </div>
-            )}
-            {project.stats.volume24h && (
-              <div className="rounded-xl p-3 text-center" style={{ backgroundColor: 'rgba(227,200,150,0.05)', border: '1px solid rgba(227,200,150,0.15)' }}>
-                <div className="text-xs text-gray-600 mb-1">24h Volume</div>
-                <div className="text-sm font-medium" style={{ color: '#E3C896' }}>{project.stats.volume24h}</div>
-              </div>
-            )}
-            {project.stats.users && (
-              <div className="rounded-xl p-3 text-center" style={{ backgroundColor: 'rgba(227,200,150,0.05)', border: '1px solid rgba(227,200,150,0.15)' }}>
-                <div className="text-xs text-gray-600 mb-1">Users</div>
-                <div className="text-sm font-medium" style={{ color: '#E3C896' }}>{project.stats.users}</div>
-              </div>
-            )}
-            <div className="rounded-xl p-3 text-center" style={{ backgroundColor: 'rgba(227,200,150,0.05)', border: '1px solid rgba(227,200,150,0.15)' }}>
-              <div className="text-xs text-gray-600 mb-1">Founded</div>
-              <div className="text-sm font-medium" style={{ color: '#E3C896' }}>{project.stats.founded}</div>
-            </div>
-          </div>
-
           <div className="flex flex-wrap gap-2 mb-6">
             {project.tags.map((tag: string) => (
               <span key={tag} className="text-xs px-3 py-1 rounded-full" style={{ backgroundColor: 'rgba(227,200,150,0.08)', border: '1px solid rgba(227,200,150,0.2)', color: '#E3C896' }}>
@@ -118,38 +92,13 @@ export default function ProjectPage() {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <button
-              onClick={() => window.open(project.website, '_blank')}
-              className="text-xs px-4 py-2 rounded-lg transition-colors"
-              style={{ backgroundColor: 'rgba(227,200,150,0.1)', border: '1px solid rgba(227,200,150,0.3)', color: '#E3C896' }}
-            >
-              🌐 Website
-            </button>
-            {project.twitter && (
+            {project.url && (
               <button
-                onClick={() => window.open(project.twitter, '_blank')}
+                onClick={() => window.open(project.url, '_blank')}
                 className="text-xs px-4 py-2 rounded-lg transition-colors"
                 style={{ backgroundColor: 'rgba(227,200,150,0.1)', border: '1px solid rgba(227,200,150,0.3)', color: '#E3C896' }}
               >
-                𝕏 Twitter
-              </button>
-            )}
-            {project.discord && (
-              <button
-                onClick={() => window.open(project.discord, '_blank')}
-                className="text-xs px-4 py-2 rounded-lg transition-colors"
-                style={{ backgroundColor: 'rgba(227,200,150,0.1)', border: '1px solid rgba(227,200,150,0.3)', color: '#E3C896' }}
-              >
-                💬 Discord
-              </button>
-            )}
-            {project.docs && (
-              <button
-                onClick={() => window.open(project.docs, '_blank')}
-                className="text-xs px-4 py-2 rounded-lg transition-colors"
-                style={{ backgroundColor: 'rgba(227,200,150,0.1)', border: '1px solid rgba(227,200,150,0.3)', color: '#E3C896' }}
-              >
-                📄 Docs
+                🌐 Website
               </button>
             )}
           </div>
@@ -195,7 +144,7 @@ export default function ProjectPage() {
                           src={related.logo}
                           alt={related.name}
                           className="w-full h-full object-cover rounded-lg"
-                          onError={(e) => {
+                          onError={(e: any) => {
                             e.currentTarget.style.display = 'none'
                             const sibling = e.currentTarget.nextElementSibling as HTMLElement
                             if (sibling) sibling.style.display = 'block'
