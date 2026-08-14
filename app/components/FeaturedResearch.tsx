@@ -32,6 +32,9 @@ export default function FeaturedResearch() {
           onClick={() => router.push('/news/' + article.slug)}
           className="rounded-2xl p-6 md:p-8 cursor-pointer transition-all hover:scale-[1.01] bg-white/[0.03] border border-white/[0.08]"
         >
+          {article.image && (
+            <img src={article.image} alt={article.title} className="w-full rounded-xl mb-4 object-cover" style={{ maxHeight: '300px' }} />
+          )}
           <div className="inline-block text-xs px-3 py-1 rounded-full mb-3 border border-white/[0.1]" style={{ color: '#E3C896' }}>
             {article.tag}
           </div>

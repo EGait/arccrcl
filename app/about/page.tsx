@@ -87,7 +87,7 @@ export default function AboutPage() {
               Have a project you want featured? Want to get in touch?
             </p>
             <button
-              onClick={() => window.location.href = 'mailto:hello@arccrcl.com'}
+              onClick={() => window.location.href = 'mailto:arccrcl@gmail.com'}
               className="mt-3 text-xs px-4 py-2 rounded-lg transition-colors"
               style={{ backgroundColor: 'rgba(227,200,150,0.1)', border: '1px solid rgba(227,200,150,0.3)', color: '#E3C896' }}
             >
