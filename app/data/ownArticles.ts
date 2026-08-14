@@ -11,6 +11,6 @@ export const ownArticles = [
     date: 'August 14, 2026',
     readTime: '8 min read',
     tag: 'Featured Research',
-    image: '/og-image.png',
+    image: '/arc-research-deepdive.jpg',
   },
 ]
