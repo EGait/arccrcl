@@ -91,7 +91,7 @@ export default function AboutPage() {
               className="mt-3 text-xs px-4 py-2 rounded-lg transition-colors"
               style={{ backgroundColor: 'rgba(227,200,150,0.1)', border: '1px solid rgba(227,200,150,0.3)', color: '#E3C896' }}
             >
-              hello@arccrcl.com
+              arccrcl@gmail.com
             </button>
           </div>
 
