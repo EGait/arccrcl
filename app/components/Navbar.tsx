@@ -8,13 +8,13 @@ export default function Navbar() {
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 border-b bg-[#070c16]/95 backdrop-blur-sm" style={{ borderColor: 'rgba(227,200,150,0.2)' }}>
-        <div className="flex items-center justify-between px-6 py-4">
+        <div className="flex items-center px-6 py-4">
           <a href="/" className="flex items-center gap-2">
             <img src="/icon.png" alt="ArcCRCL" className="h-8 w-8 object-contain" />
             <span className="text-xl font-medium" style={{ color: '#E3C896' }}>ArcCRCL</span>
           </a>
 
-          <div className="hidden md:flex gap-6">
+          <div className="hidden md:flex gap-6 flex-1 justify-center">
             <a href="/" className="text-sm text-gray-500 hover:text-[#E3C896] transition-colors">Home</a>
             <a href="/projects" className="text-sm text-gray-500 hover:text-[#E3C896] transition-colors">Projects</a>
             <a href="/markets" className="text-sm text-gray-500 hover:text-[#E3C896] transition-colors">Markets</a>
@@ -25,7 +25,7 @@ export default function Navbar() {
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden flex flex-col gap-1.5 p-2"
+            className="md:hidden flex flex-col gap-1.5 p-2 ml-auto"
           >
             <span className={`block w-6 h-0.5 bg-gray-400 transition-all ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
             <span className={`block w-6 h-0.5 bg-gray-400 transition-all ${menuOpen ? 'opacity-0' : ''}`} />
