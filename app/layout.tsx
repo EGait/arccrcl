@@ -5,10 +5,10 @@ import ServiceWorker from './components/ServiceWorker'
 import ChatWidget from './components/ChatWidget'
 
 export const metadata: Metadata = {
-  title: 'ArcCRCL — Your Daily Hub for Arc News, Projects and Stablecoin FX',
-  description: 'ArcCRCL is your daily hub for everything on Circle\'s Arc blockchain. Discover ecosystem projects, read breaking news, compare stablecoin rails, and track the ARC token — all in one place.',
+  title: 'ArcCRCL — Your Hub for Circle Arc Blockchain News, Projects and Stablecoin FX',
+  description: 'ArcCRCL is the community hub for Circle\'s Arc blockchain. Track Arc ecosystem projects, Circle USDC stablecoin FX, breaking news, and RWAs — all in one place.',
   manifest: '/manifest.json',
-  keywords: ['Arc', 'ARC token', 'Circle', 'Arc blockchain news', 'Arc ecosystem projects', 'stablecoin finance', 'USDC', 'CCTP', 'StableFX'],
+  keywords: ['Arc', 'Arc blockchain', 'ARC token', 'Circle', 'Circle blockchain', 'Circle Arc', 'USDC', 'EURC', 'stablecoin finance', 'Arc ecosystem', 'Arc projects', 'StableFX', 'CCTP', 'USYC'],
   authors: [{ name: 'ArcCRCL' }],
   creator: 'ArcCRCL',
   verification: {
@@ -17,8 +17,8 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: 'https://arccrcl.com',
-    title: 'ArcCRCL — Your Daily Hub for Arc News, Projects and Stablecoin FX',
-    description: 'ArcCRCL is your daily hub for everything on Circle\'s Arc blockchain. Discover ecosystem projects, read breaking news, compare stablecoin rails, and track the ARC token — all in one place.',
+    title: 'ArcCRCL — Your Hub for Circle Arc Blockchain News, Projects and Stablecoin FX',
+    description: 'ArcCRCL is the community hub for Circle\'s Arc blockchain. Track Arc ecosystem projects, Circle USDC stablecoin FX, breaking news, and RWAs — all in one place.',
     siteName: 'ArcCRCL',
     images: [
       {
@@ -33,8 +33,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@ArcCRCL',
     creator: '@ArcCRCL',
-    title: 'ArcCRCL — Your Daily Hub for Arc News, Projects and Stablecoin FX',
-    description: 'ArcCRCL is your daily hub for everything on Circle\'s Arc blockchain. Discover ecosystem projects, read breaking news, compare stablecoin rails, and track the ARC token — all in one place.',
+    title: 'ArcCRCL — Your Hub for Circle Arc Blockchain News, Projects and Stablecoin FX',
+    description: 'ArcCRCL is the community hub for Circle\'s Arc blockchain. Track Arc ecosystem projects, Circle USDC stablecoin FX, breaking news, and RWAs — all in one place.',
     images: ['https://arccrcl.com/og-image.png'],
   },
   appleWebApp: {
