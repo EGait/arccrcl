@@ -2,6 +2,18 @@
 
 export const ownArticles = [
   {
+    id: 'arc-hackathons',
+    title: 'The Programmable Money Hackathon: What\'s Being Built on Arc Right Now',
+    slug: 'arc-hackathons',
+    description: 'Encode Club\'s 4-week Programmable Money Hackathon is the biggest active builder event on Arc — DeFi and AI agent tracks, with an accelerator for top teams.',
+    summary: 'Encode Club\'s 4-week Programmable Money Hackathon is the biggest active builder event on Arc — DeFi and AI agent tracks, with an accelerator for top teams.',
+    link: '/news/arc-hackathons',
+    date: 'August 17, 2026',
+    readTime: '5 min read',
+    tag: 'Ecosystem',
+    image: '/arc-hackathon-deepdive.jpg',
+  },
+  {
     id: 'what-is-arc',
     title: 'What Is Arc? Circle\'s Blockchain for the Future of Finance',
     slug: 'what-is-arc',
