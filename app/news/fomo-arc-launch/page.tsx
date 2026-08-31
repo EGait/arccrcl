@@ -107,7 +107,7 @@ export default function FomoArcLaunchPage() {
               FOMO brings something the institutional partners don't: <strong className="text-gray-200">retail transaction volume from day one</strong>. BlackRock validates the chain's credibility. Visa and Mastercard validate the payments thesis. But FOMO validates that real people will actually use Arc to do things — and generate the transaction fees that make the network economically sustainable.
             </p>
             <p>
-              For the Arc ecosystem, FOMO's integration also signals something broader: Arc isn't just for institutions. It's a chain where consumer apps can thrive alongside institutional infrastructure — and where the USDC-native gas model makes consumer UX genuinely better, not just marginally different.
+              For the Arc ecosystem , FOMO's integration also signals something broader: Arc isn't just for institutions. It's a chain where consumer apps can thrive alongside institutional infrastructure — and where the USDC-native gas model makes consumer UX genuinely better, not just marginally different.
             </p>
           </div>
 
