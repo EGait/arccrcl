@@ -1,6 +1,18 @@
 // In-house deep-dive articles — original ArcCRCL research and coverage.
 
 export const ownArticles = [
+    {
+    id: 'fomo-arc-launch',
+    title: 'FOMO Is Coming to Arc on Day One — Here\'s Why It Matters',
+    slug: 'fomo-arc-launch',
+    description: 'Circle CEO Jeremy Allaire confirmed FOMO — the social trading app with 500K+ traders and $1.4M weekly revenue — will launch on Arc at mainnet on September 16.',
+    summary: 'Circle CEO Jeremy Allaire confirmed FOMO — the social trading app with 500K+ traders and $1.4M weekly revenue — will launch on Arc at mainnet on September 16.',
+    link: '/news/fomo-arc-launch',
+    date: 'August 18, 2026',
+    readTime: '5 min read',
+    tag: 'Breaking',
+    image: '/fomo-arc-deepdive.jpg',
+  },
   {
     id: 'arc-hackathons',
     title: 'The Programmable Money Hackathon: What\'s Being Built on Arc Right Now',
