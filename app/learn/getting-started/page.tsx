@@ -189,7 +189,7 @@ export default function GettingStartedPage() {
           <div>
             <h2 className="text-lg font-medium text-gray-200 mb-3">What's Next?</h2>
             <p>
-              Arc mainnet launches <strong className="text-gray-200">September 16, 2026</strong>. In the meantime, you can practice with free testnet USDC at <a href="https://faucet.circle.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#E3C896' }}>faucet.circle.com</a>, explore our <a href="/news/what-is-arc" style={{ color: '#E3C896' }}>deep dive on what Arc is</a>, or browse the <a href="/projects" style={{ color: '#E3C896' }}>projects building on Arc</a>.
+              Arc mainnet went live on <strong className="text-gray-200">September 16, 2026</strong>. If you want to experiment before using real funds, you can still practice with free testnet USDC at <a href="https://faucet.circle.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#E3C896' }}>faucet.circle.com</a>, explore our <a href="/news/what-is-arc" style={{ color: '#E3C896' }}>deep dive on what Arc is</a>, read <a href="/news/arc-mainnet-two-months" style={{ color: '#E3C896' }}>what happened at launch</a>, or browse the <a href="/projects" style={{ color: '#E3C896' }}>projects building on Arc</a>.
             </p>
           </div>
 

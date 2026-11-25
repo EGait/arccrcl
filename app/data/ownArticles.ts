@@ -1,6 +1,42 @@
 // In-house deep-dive articles — original ArcCRCL research and coverage.
 
 export const ownArticles = [
+  {
+    id: 'arc-mainnet-two-months',
+    title: "Arc Mainnet, Two Months In: What Launched and What's Happened Since",
+    slug: 'arc-mainnet-two-months',
+    description: 'Arc mainnet went live September 16 with institutional validators, Aave, Uniswap and Morpho. Two months in: $30B+ of USDC moved and ~$1.5B resting onchain.',
+    summary: 'Arc mainnet went live September 16 with institutional validators, Aave, Uniswap and Morpho. Two months in: $30B+ of USDC moved and ~$1.5B resting onchain.',
+    link: '/news/arc-mainnet-two-months',
+    date: 'November 25, 2026',
+    readTime: '6 min read',
+    tag: 'Featured Research',
+    image: null,
+  },
+  {
+    id: 'arc-token-explained',
+    title: "The ARC Token: What Circle's 10 Billion Genesis Mint Does — and Doesn't — Mean",
+    slug: 'arc-token-explained',
+    description: 'Circle minted 10 billion ARC at mainnet, but there is no public sale or listing. What the token is for, the reported allocation, the private presale, and how to avoid scams.',
+    summary: 'Circle minted 10 billion ARC at mainnet, but there is no public sale or listing. What the token is for, the reported allocation, the private presale, and how to avoid scams.',
+    link: '/news/arc-token-explained',
+    date: 'November 25, 2026',
+    readTime: '5 min read',
+    tag: 'Guide',
+    image: null,
+  },
+  {
+    id: 'circle-q3-2026-arc',
+    title: "Circle's Q3 2026: What the Numbers Say About Arc",
+    slug: 'circle-q3-2026-arc',
+    description: "Circle's first quarter with Arc live: reserve income fell 8% as rates dropped, a $182M ARC presale filled the gap, and $30B+ of USDC moved across Arc.",
+    summary: "Circle's first quarter with Arc live: reserve income fell 8% as rates dropped, a $182M ARC presale filled the gap, and $30B+ of USDC moved across Arc.",
+    link: '/news/circle-q3-2026-arc',
+    date: 'November 25, 2026',
+    readTime: '6 min read',
+    tag: 'Research',
+    image: null,
+  },
     {
     id: 'fomo-arc-launch',
     title: 'FOMO Is Coming to Arc on Day One — Here\'s Why It Matters',

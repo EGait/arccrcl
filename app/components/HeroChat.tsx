@@ -7,6 +7,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { CHAT_MODELS, DEFAULT_MODEL_KEY } from "../lib/models";
+import { safeHref } from "../lib/safeHref";
 
 const API_URL = "/api/chat";
 
@@ -35,8 +36,10 @@ function renderContent(text: string) {
     .map((part, i) => {
       const md = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
       if (md) {
+        const href = safeHref(md[2]);
+        if (!href) return md[1];
         return (
-          <a key={i} href={md[2]} target="_blank" rel="noopener noreferrer" className="hc-link">
+          <a key={i} href={href} target="_blank" rel="noopener noreferrer" className="hc-link">
             {md[1]}
           </a>
         );
@@ -180,7 +183,7 @@ export default function HeroChat({ compact = false }: { compact?: boolean }) {
               {m.sources && m.sources.length > 0 && (
                 <div className="hc-sources">
                   <span className="hc-srclabel">From the web:</span>
-                  {m.sources.map((s, j) => (
+                  {m.sources.filter((s) => safeHref(s.url)).map((s, j) => (
                     <a key={j} href={s.url} target="_blank" rel="noopener noreferrer" className="hc-src">
                       {s.title}
                     </a>

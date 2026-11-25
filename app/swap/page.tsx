@@ -14,7 +14,7 @@ export default function SwapPage() {
           Swap on <span style={{ color: '#E3C896' }}>Arc</span>
         </h1>
         <p className="text-gray-500 text-sm max-w-md mx-auto">
-          Onchain stablecoin FX and swaps on Arc are coming soon, once mainnet launches.
+          Onchain stablecoin FX and swaps on Arc are coming soon to ArcCRCL.
         </p>
       </div>
 

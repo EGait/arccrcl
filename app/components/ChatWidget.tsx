@@ -7,6 +7,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { CHAT_MODELS, DEFAULT_MODEL_KEY } from "../lib/models";
+import { safeHref } from "../lib/safeHref";
 
 const API_URL = "/api/chat";
 const GREETING =
@@ -30,8 +31,10 @@ function renderContent(text: string) {
     .map((part, i) => {
       const md = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
       if (md) {
+        const href = safeHref(md[2]);
+        if (!href) return md[1];
         return (
-          <a key={i} href={md[2]} target="_blank" rel="noopener noreferrer" className="cbw-link">
+          <a key={i} href={href} target="_blank" rel="noopener noreferrer" className="cbw-link">
             {md[1]}
           </a>
         );
@@ -159,7 +162,7 @@ export default function ChatWidget() {
               </div>
               {m.sources && m.sources.length > 0 && (
                 <div className="cbw-sources">
-                  {m.sources.map((s, j) => (
+                  {m.sources.filter((s) => safeHref(s.url)).map((s, j) => (
                     <a
                       key={j}
                       href={s.url}

@@ -39,8 +39,15 @@ const WINDOW_MS = 60_000;
 const MAX_REQ_PER_WINDOW = 15;
 const hits = new Map<string, { count: number; reset: number }>();
 
+const MAX_TRACKED_IPS = 5000;
+
 function rateLimited(ip: string): boolean {
   const now = Date.now();
+  // Prune expired entries so the map can't grow without bound.
+  if (hits.size > MAX_TRACKED_IPS) {
+    for (const [k, v] of hits) if (now > v.reset) hits.delete(k);
+    if (hits.size > MAX_TRACKED_IPS) hits.clear();
+  }
   const rec = hits.get(ip) ?? { count: 0, reset: now + WINDOW_MS };
   if (now > rec.reset) {
     rec.count = 0;
